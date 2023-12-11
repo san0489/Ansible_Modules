@@ -1,0 +1,19 @@
+- hosts: all
+  become: yes
+  become_user: root
+  gather_facts: no
+ # serial: 10
+  ignore_errors: yes
+  tasks:
+  - name: Add the default gateway
+    replace:
+      path: /etc/sysconfig/network-scripts/ifcfg-ens192
+      regexp: GATEWAY=10.193.255.1
+      replace: GATEWAY=10.193.255.5
+      backup: yes
+  - name: restarting the network service
+    systemd:
+      name: network.service
+      daemon_reload: yes
+      enabled: yes
+      state: restarted 
