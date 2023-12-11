@@ -1,0 +1,36 @@
+- hosts: SAN
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:
+  - name: Create the file system
+    lvg:
+      vg: smsbpel
+      pvs: /dev/sdc
+    ignore_errors: yes
+  - name: Create the file system
+    lvol:
+      vg: smsbpel
+      lv: lvapp
+      size: 250G
+      pvs: /dev/sdc
+    ignore_errors: yes
+  - name: Create a xfs filesystem
+    filesystem:
+      fstype: xfs
+      dev: /dev/omsbpel/lvapp
+    ignore_errors: yes
+  - name: Add file system to fstab
+    lineinfile:
+      path: /etc/fstab
+      line: /dev/mapper/smsbpel-lvapp /opt/app xfs noatime,nodiratime 0 2
+    ignore_errors: yes
+  - name: create the app folder
+    file: 
+      path: /opt/app
+      state: directory
+      mode: '0755'
+  - name: Mouting the filesystem
+    shell:
+      cmd: mount -a
+
