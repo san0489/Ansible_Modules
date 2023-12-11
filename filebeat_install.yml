@@ -1,0 +1,75 @@
+- hosts: all
+  become: yes
+  become_user: root
+  gather_facts: no
+  ignore_errors: yes
+  vars:
+    filebeat_version: 7.14.0
+  tasks:
+  - name: Copy the elasticsearch folder
+    file:
+      path: /opt/elasticsearch/
+      mode: 0755
+      state: directory
+
+  - name: download node exporter tar file
+    get_url:
+      url: https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ filebeat_version }}-linux-x86_64.tar.gz
+      dest: /opt/elasticsearch
+
+  - name: extract the tar
+    unarchive:
+      remote_src: yes
+      src: /opt/elasticsearch/filebeat-{{ filebeat_version }}-linux-x86_64.tar.gz
+      dest: /opt/elasticsearch
+
+  - name: rename the elasticsearch directory
+    shell: mv /opt/elasticsearch/filebeat-{{ filebeat_version }}-linux-x86_64 /opt/elasticsearch/filebeat
+
+  - name: Copy the elasticsearch folder
+    file:
+      path: /opt/elasticsearch/filebeat/inputs.d/
+      mode: 0755
+      state: directory
+
+  - name: Copy the yaml for Filebeat
+    copy:
+      src: /opt/elasticsearch/filebeat/filebeat.yml
+      dest: /opt/elasticsearch/filebeat/filebeat.yml
+      mode: 0755
+
+#  - name: Copy the inputs.d for Filebeat
+ #   copy:
+ #     src: /opt/elasticsearch/filebeat/inputs.d/system.yml
+  #    dest: /opt/elasticsearch/filebeat/inputs.d/system.yml
+   #   mode: 0755
+
+  - name: Copy the inputs.d for Filebeat
+    copy:
+      src: /opt/elasticsearch/filebeat/inputs.d/oms.yml
+      dest: /opt/elasticsearch/filebeat/inputs.d/oms.yml
+      mode: 0755
+
+  - name: Copy the Service file for Filebeat
+    copy:
+      src: /etc/systemd/system/filebeat.service
+      dest: /etc/systemd/system/filebeat.service
+      mode: 0755
+
+  - name: Start the filebeat service
+    systemd:
+      name: filebeat.service
+      daemon_reload: yes
+      enabled: yes
+      state: restarted
+
+  - name: Setting the permission on /opt/elasticsearch folder
+    file:
+      path: /opt/elasticsearch
+      mode: 0755
+      recurse: yes
+
+  - name: Removing the tar file
+    file:
+      path: /opt/elasticsearch/filebeat-7.14.0-linux-x86_64.tar.gz
+      state: absent 
