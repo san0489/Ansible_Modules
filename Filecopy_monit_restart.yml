@@ -1,0 +1,15 @@
+- hosts: SAN
+  become: yes
+  gather_facts: no
+  ignore_errors: yes
+  tasks:
+  - name: copy the file
+    copy:
+      src: /home/s_snalam/ANSIBLE/OSUpgrade/file_system.conf
+      dest: /opt/monit/conf/config.d/file_system.conf
+      owner: root
+      mode: 0644
+  - name: Restarting the monit service
+    service:
+      name: monit
+      state: reloaded
