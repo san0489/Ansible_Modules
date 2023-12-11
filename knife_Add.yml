@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  become: yes
+  gather_facts: no
+  tasks:
+  - include_vars: knifehosts.yml
+  - name: Delete the neu collection
+    shell:
+      cmd: knife node run_list remove "{{item}}" "role[build_collection]"
+    args:
+      chdir: /home/nalam/chef/DEV
+    loop: "{{ SAN }}"
+    ignore_errors: yes
+  - name: Add  the OMS build Server
+    shell:
+      cmd: knife node run_list add "{{item}}" "role[build-server]"
+    args:
+      chdir: /home/nalam/chef/DEV
+    loop: "{{ SAN }}"
+    ignore_errors: yes
+
