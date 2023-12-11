@@ -1,0 +1,36 @@
+- hosts: all
+  become: yes
+  become_user: root
+  ignore_errors: yes
+  gather_facts: no
+  tasks:
+  - name: extend the disk
+    shell: |
+       lvextend -L +48G /dev/mapper/smsvg-lvapp
+       xfs_growfs /dev/mapper/smsvg-lvapp
+  - name: create ssh directory
+    file:
+      path: /root/.ssh/
+      state: directory
+
+  - name: Installing rsync
+    yum:
+        name: rsync
+        state: present
+
+  - name: copy the authorized key
+    copy: 
+      src: /home/snalam/id_rsa.pub
+      dest: /root/.ssh/authorized_keys
+
+  - name: Add  user to the group
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regex: PermitRootLogin  no
+      line: PermitRootLogin  prohibit-password
+      state: present
+  
+  - name: refresh the ssh service
+    service:
+      name: sshd.service
+      state: restarted
