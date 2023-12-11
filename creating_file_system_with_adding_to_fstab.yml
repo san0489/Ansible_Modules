@@ -1,0 +1,85 @@
+- hosts: all
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:
+  - name: Add file system to fstab
+    lineinfile:
+      path: /etc/fstab
+      line: /dev/mapper/rootvg-lvopt /opt                    xfs     defaults        0 0
+      state: absent
+
+  - name: Add file system to fstab
+    lineinfile:
+      path: /etc/fstab
+      line: /dev/mapper/smsvg-lvapp /opt/app xfs noatime,nodiratime 0 2
+      state: absent
+
+
+  - name: Creating the oracle directory
+    file:
+       path: /data
+       state: directory
+       mode: 0755
+
+- hosts: all
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:
+  - name: Create the file system
+    lvg:
+      vg: smsvg
+      pvs: /dev/sdb
+    ignore_errors: yes
+  - name: Create the file system
+    lvol:
+      vg: smsvg
+      lv: lvapp
+      size: 95G
+      pvs: /dev/sdb
+    ignore_errors: yes
+  - name: Create a xfs filesystem
+    filesystem:
+      fstype: xfs
+      dev: /dev/smsvg/lvapp
+    ignore_errors: yes
+  - name: Add file system to fstab
+    lineinfile:
+      path: /etc/fstab
+      line: /dev/mapper/smsvg-lvapp /opt xfs noatime,nodiratime 0 2
+    ignore_errors: yes
+  - name: Mouting the filesystem
+    shell:
+      cmd: mount -a
+
+- hosts: all
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:
+  - name: Create the file system
+    lvg:
+      vg: caredata
+      pvs: /dev/sdc
+    ignore_errors: yes
+  - name: Create the file system
+    lvol:
+      vg: smscare
+      lv: lvcare
+      size: 50G
+      pvs: /dev/sdc
+    ignore_errors: yes
+  - name: Create a xfs filesystem
+    filesystem:
+      fstype: xfs
+      dev: /dev/smscare/lvcare
+    ignore_errors: yes
+  - name: Add file system to fstab
+    lineinfile:
+      path: /etc/fstab
+      line: /dev/mapper/smscare-lvcare /data  xfs noatime,nodiratime 0 2
+    ignore_errors: yes
+  - name: Mouting the filesystem
+    shell:
+      cmd: mount -a
