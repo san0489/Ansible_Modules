@@ -1,0 +1,8 @@
+- hosts: all
+  become: yes
+  become_user: root
+  ignore_errors: yes
+  gather_facts: no
+  tasks:
+  - name:  Synchronization using rsync protocol on delegate host (push)
+    shell: rsync --progress -avhu -e ssh /opt/app/oracle/ root@ctbpwlsohs01.sanstar.net:/opt/app/oracle/
