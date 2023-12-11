@@ -1,0 +1,22 @@
+- hosts: SAN
+  become: yes
+  gather_facts: no
+  ignore_errors: yes
+  tasks:
+  - name: Removing the localtime
+    file:
+      path: /etc/localtime
+      state: absent
+
+  - name: Create a localtime symbolic link
+    file:
+      src: /usr/share/zoneinfo/America/New_York
+      dest: /etc/localtime
+      state: link
+
+  - name: copying the datetime
+    copy:
+      src: /opt/app/fabfile/local_bin_files/clock
+      dest: /etc/sysconfig/clock
+      owner: root
+      mode: 0644
