@@ -1,0 +1,12 @@
+- hosts: all
+  become: yes
+  become_user: root
+  gather_facts: no
+  ignore_errors: yes
+  tasks: 
+  - name: Start the filebeat service
+    systemd:
+      name: filebeat.service
+      daemon_reload: yes
+      enabled: yes
+      state: restarted
