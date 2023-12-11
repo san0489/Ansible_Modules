@@ -1,0 +1,20 @@
+- hosts: all
+  become: yes
+  serial: 30
+  gather_facts: no
+  ignore_errors: yes
+  tasks:
+  - name: Adding the new server to rsyslog file
+    lineinfile:
+      path: /etc/rsyslog.d/49-remote.conf
+      line: '*.info;mail.none;authpriv.none;cron.none @stomvprelk.va.sanstar.com:514'
+      backup: yes
+
+  - name: Start the rsyslog service
+    systemd:
+      name: rsyslog
+      daemon_reload: yes
+      enabled: yes
+      state: restarted
+
+
