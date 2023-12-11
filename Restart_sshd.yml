@@ -1,0 +1,12 @@
+- hosts: all
+  become: yes
+  become_user: root
+  ignore_errors: yes
+  serial: 10
+  gather_facts: no
+  tasks:
+  - name: refresh the ssd service
+    service:
+      name: sshd.service
+      state: restarted
+
