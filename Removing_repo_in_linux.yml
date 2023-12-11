@@ -1,0 +1,15 @@
+- hosts: all
+  become: yes
+  become_user: root
+  serial: 30
+  gather_facts: no
+  ignore_errors: yes
+  tasks:
+  - name: Removing the old  Repository
+    file:
+      path: /etc/yum.repos.d/sms.repo
+      state: absent
+  - name: Removing the old2  Repository
+    file:
+      path: /etc/yum.repos.d/sms2.repo
+      state: absent
