@@ -1,0 +1,35 @@
+- hosts: all
+  become: yes
+  become_user: root
+  ignore_errors: yes
+  serial: 10
+  gather_facts: no
+  tasks:
+  - name: create the oracle user
+    lineinfile:
+      path: /etc/passwd
+      line: oracle:x:101:102:Oracle Administrator:/home/oracle:/bin/bash
+
+  - name: Add oracle user to the group
+    lineinfile:
+      path: /etc/group
+      line: |
+        dba:x:101:oracle
+        oinstall:x:102:oracle
+
+  - name: Add oracle user to the group
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: 'PermitRootLogin'
+      state: absent
+
+  - name: Add oracle user to the group
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      line: PermitRootLogin yes
+      state: present
+  
+  - name: refresh the ssd service
+    service:
+      name: sssd.service
+      state: restarted
