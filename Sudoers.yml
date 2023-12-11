@@ -1,0 +1,11 @@
+- hosts: all
+  become: yes
+  gather_facts: no
+  ignore_errors: yes
+  tasks:
+  - name: Add the user local bin to the sudoers
+    copy:
+      src: /home/snalam/ANSIBLE/OSUpgrade/billteam-sudoers
+      dest: /etc/sudoers.d/
+      validate: /usr/sbin/visudo -csf %s 
+
