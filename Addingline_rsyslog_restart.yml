@@ -7,7 +7,7 @@
   - name: Adding the new server to rsyslog file
     lineinfile:
       path: /etc/rsyslog.d/49-remote.conf
-      line: '*.info;mail.none;authpriv.none;cron.none @stomvprelk.va.sanstar.com:514'
+      line: '*.info;mail.none;authpriv.none;cron.none @sprelk.va.sanstar.com:514'
       backup: yes
 
   - name: Start the rsyslog service
