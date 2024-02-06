@@ -10,20 +10,14 @@
       path: /etc/passwd
       line: oracle:x:101:102:Oracle Administrator:/home/oracle:/bin/bash
 
-  - name: Add oracle user to the group
+  - name: Add oracle user to the dba group
     lineinfile:
       path: /etc/group
       line: |
         dba:x:101:oracle
         oinstall:x:102:oracle
 
-  - name: Add oracle user to the group
-    lineinfile:
-      path: /etc/ssh/sshd_config
-      regexp: 'PermitRootLogin'
-      state: absent
-
-  - name: Add oracle user to the group
+  - name: Allowing root login to the user
     lineinfile:
       path: /etc/ssh/sshd_config
       line: PermitRootLogin yes
