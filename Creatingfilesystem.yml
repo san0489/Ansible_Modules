@@ -3,14 +3,14 @@
   become_user: root
   gather_facts: no
   tasks:
-  - name: Create the file system
+  - name: Create the volume group
     lvg:
-      vg: smsbpel
+      vg: smsbpl
       pvs: /dev/sdc
     ignore_errors: yes
-  - name: Create the file system
+  - name: Assign the volume group to logical volume
     lvol:
-      vg: smsbpel
+      vg: smsbpl
       lv: lvapp
       size: 250G
       pvs: /dev/sdc
@@ -18,12 +18,12 @@
   - name: Create a xfs filesystem
     filesystem:
       fstype: xfs
-      dev: /dev/omsbpel/lvapp
+      dev: /dev/smsbpl/lvapp
     ignore_errors: yes
   - name: Add file system to fstab
     lineinfile:
       path: /etc/fstab
-      line: /dev/mapper/smsbpel-lvapp /opt/app xfs noatime,nodiratime 0 2
+      line: /dev/mapper/smsbpl-lvapp /opt/app xfs noatime,nodiratime 0 2
     ignore_errors: yes
   - name: create the app folder
     file: 
