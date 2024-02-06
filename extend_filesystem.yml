@@ -6,7 +6,7 @@
   gather_facts: no
   tasks:
   - name: Extending the disk
-    shell: lvextend -L +45G /dev/mapper/omsvg-lvapp
+    shell: lvextend -L +45G /dev/mapper/smsvg-lvapp
 
   - name: Resizing the File System
-    shell: xfs_growfs /dev/mapper/omsvg-lvapp
+    shell: xfs_growfs /dev/mapper/smsvg-lvapp
