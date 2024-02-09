@@ -1,0 +1,10 @@
+---
+- hosts: all 
+  become: yes
+  serial: 1
+  gather_facts: no
+  tasks:
+  - name: Restart Service
+    monit:
+      name: app_rim_request_webservice
+      state: restarted
