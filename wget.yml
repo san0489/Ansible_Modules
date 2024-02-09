@@ -1,0 +1,11 @@
+- hosts: localhost
+  gather_facts: no
+  tasks:
+  - include_vars: wget.yml
+  - name: Checking connectivity
+    uri:
+      url: "{{ item }}"
+      method: GET
+      return_content: true
+      validate_certs: no
+    loop: "{{ SAN }}"
