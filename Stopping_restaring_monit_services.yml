@@ -1,0 +1,18 @@
+---
+- hosts: all 
+  become: yes
+  serial: 50%
+  ignore_errors: yes
+  gather_facts: no
+  tasks:
+  - name: Stop the services
+    command:   
+      cmd: monit_stop_all
+  - pause:
+      seconds: 5
+  - name: kill the process
+    shell:
+      cmd: pkill -9 'startNS|java|osagent|rmi|httpd'
+  - name: Start the services
+    command:
+      cmd: monit_start_all
