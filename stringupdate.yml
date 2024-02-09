@@ -1,0 +1,13 @@
+- hosts: san
+  become: yes
+  gather_facts: no
+  ignore_errors: yes
+  vars_files:
+    - db_strings.yml
+  tasks:
+  - name: Updating Password in OI GUI
+    replace:
+      path: /home/s_snalam/ANSIBLE/configtest.yml
+      regexp: "{{old}}"
+      replace: "{{new}}"
+      backup: yes
