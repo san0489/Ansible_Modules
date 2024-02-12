@@ -1,0 +1,62 @@
+---
+- hosts: localhost
+  become: yes
+  gather_facts: no
+  tasks:
+  - include_vars: VMs.yml
+  - name: Deleting node from DEV ENV
+    shell:
+      cmd: knife node add -y  "{{item}}"
+    args:
+      chdir: /home/s_snalam/chef/DEV
+    loop: "{{ SAN }}"
+    ignore_errors: yes
+  - name: Deleting client from DEV ENV
+    shell:
+      cmd: knife client add -y  "{{item}}"
+    args:
+      chdir: /home/s_snalam/chef/DEV
+    loop: "{{ SAN }}"
+    ignore_errors: yes
+
+---
+- hosts: localhost
+  become: yes
+  gather_facts: no
+  tasks:
+  - include_vars: VMs.yml
+  - name: Delete the neu collection
+    shell:
+      cmd: knife node run_list remove "{{item}}" "role[build_eu_collection]"
+    args:
+      chdir: /home/chef/PROD
+    loop: "{{ SAN }}"
+    ignore_errors: yes
+  - name: Add  the OMS build Server
+    shell:
+      cmd: knife node run_list add "{{item}}" "role[build-sms-server]"
+    args:
+      chdir: /home/chef/PROD
+    loop: "{{ SAN }}"
+    ignore_errors: yes
+
+---
+- hosts: localhost
+  become: yes
+  gather_facts: no
+  tasks:
+  - include_vars: VMs.yml
+  - name: Deleting node from CTE ENV
+    shell:
+      cmd: knife node delete -y  "{{item}}"
+    args:
+      chdir: /home/chef/PROD
+    loop: "{{ SAN }}"
+    ignore_errors: yes
+  - name: Deleting client from CTE ENV
+    shell:
+      cmd: knife client delete -y  "{{item}}"
+    args:
+      chdir: /home/chef/PROD
+    loop: "{{ SAN }}"
+    ignore_errors: yes
