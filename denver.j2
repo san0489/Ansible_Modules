@@ -1,0 +1,38 @@
+{
+"group": "/api/v2/groups/23/",
+"items": {
+"deploy-items": [
+{
+"blueprint": "/api/v2/blueprints/17/",
+"blueprint-items-arguments": {
+"build-item-Server": {
+"attributes": {
+"hostname": "{{item.Host}}",
+"quantity": 1
+},
+"environment": "/api/v2/environments/{{item.env}}/",
+"os-build": "/api/v2/os-builds/120",
+"parameters": {
+"business-service-id": "SMS",
+"chef-environment": "st_sms_1_3_44",
+"cmdb-support-group": "SMS Support",
+#"cmdb-support-group": "Admin",
+"cpu-cnt": "{{item.CPU}}",
+"ldap-host-group": "{{item.HostGroup}}",
+"ldap-user-group": "oms_appsup_user",
+"mem-size": "{{item.MEM}}",
+"sc-nic-0": "{{item.SUBNET}}",
+"second-disk":"{{item.Disk}}",
+"satellite_activation_key": "oms_redhat_7_jan_2022",
+#"satellite_host_collection" : "SMS",
+}
+}
+},
+"resource-name": "",
+"resource-parameters": {}
+}
+]
+},
+"submit-now": "true"
+}
+
