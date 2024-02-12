@@ -60,3 +60,13 @@
       chdir: /home/chef/PROD
     loop: "{{ SAN }}"
     ignore_errors: yes
+
+- hosts: SAN
+  become: yes
+  become_user: root
+  ignore_errors: yes
+  gather_facts: no
+  tasks:
+  - name: Running Chef Client on servers
+    shell:
+      cmd: chef-client
