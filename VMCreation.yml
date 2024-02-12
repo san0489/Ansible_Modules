@@ -1,0 +1,32 @@
+- hosts: localhost
+  gather_facts: no
+  tasks:
+  - name: Create a Token
+    uri:
+      url: https://ec.star.com/api/v2/api-token-auth/
+      method: POST
+      body:
+        username: aasasa
+        password: ir@062023
+        domain: fabstar.com
+      body_format: json
+      return_content: true
+      validate_certs: no
+    register: SANTOSH
+
+- hosts: localhost
+  gather_facts: no
+  tasks:
+  - include_vars: Host_Parameters.yml
+  - name: Posting Provision Order
+    uri:
+      url: https://kec.star.com/api/v2/orders/
+      headers:
+        Authorization: "Bearer {{ SANTOSH.json.token }}"
+      method: POST
+      body: "{{ lookup('template', 'Denver.j2') }}"
+      body_format: json
+      return_content: true
+      validate_certs: no
+      status_code: 201
+    loop: "{{ SAN }}"
