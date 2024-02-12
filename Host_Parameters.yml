@@ -1,0 +1,4 @@
+SAN:
+
+
+- { Host: 'prox2.va.star.com', MEM: 8GB, CPU: 4, env: 431, SUBNET: 'FD4_10.61.36.0/24', Disk: '100', HostGroup: 'cte_host', UserGroup: 'sms_user'}
