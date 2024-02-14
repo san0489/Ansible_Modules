@@ -6,7 +6,7 @@
   vars:
     filebeat_version: 7.14.0
   tasks:
-  - name: Copy the elasticsearch folder
+  - name: Creating the elastic search directory
     file:
       path: /opt/elasticsearch/
       mode: 0755
