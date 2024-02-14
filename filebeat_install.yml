@@ -6,7 +6,7 @@
   vars:
     filebeat_version: 7.14.0
   tasks:
-  - name: Creating the elastic search directory
+  - name: creating the elastic search directory
     file:
       path: /opt/elasticsearch/
       mode: 0755
@@ -26,7 +26,7 @@
   - name: rename the elasticsearch directory
     shell: mv /opt/elasticsearch/filebeat-{{ filebeat_version }}-linux-x86_64 /opt/elasticsearch/filebeat
 
-  - name: Copy the elasticsearch folder
+  - name: Creating the inputs directory
     file:
       path: /opt/elasticsearch/filebeat/inputs.d/
       mode: 0755
@@ -34,13 +34,14 @@
 
   - name: Copy the yaml for Filebeat
     copy:
-      src: /opt/elasticsearch/filebeat/filebeat.yml
+      src: filebeat.yml
       dest: /opt/elasticsearch/filebeat/filebeat.yml
       mode: 0755
 
+
   - name: Copy the inputs.d for Filebeat
     copy:
-      src: /opt/elasticsearch/filebeat/inputs.d/sms.yml
+      src: inputs.d/oms.yml
       dest: /opt/elasticsearch/filebeat/inputs.d/sms.yml
       mode: 0755
 
@@ -55,7 +56,7 @@
       name: filebeat.service
       daemon_reload: yes
       enabled: yes
-      state: restarted
+      state: started
 
   - name: Setting the permission on /opt/elasticsearch folder
     file:
