@@ -41,7 +41,7 @@
 
   - name: Copy the inputs.d for Filebeat
     copy:
-      src: inputs.d/oms.yml
+      src: inputs.d/sms.yml
       dest: /opt/elasticsearch/filebeat/inputs.d/sms.yml
       mode: 0755
 
