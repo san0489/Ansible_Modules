@@ -4,14 +4,14 @@
   vars_files:
     - /home/s_snalam/ANSIBLE/Password/CTE/playbooks/cte_pwd.yml
   tasks:
-  - name: Updating CHGTWY Password in Hashicorp Vault
+  - name: Updating  Password in Hashicorp Vault
     uri:
-        url: http://stomvprvpwvault1.va.neustar.com/v1/CTE/CH
+        url: http://vault1.va.star.com/v1/CTE/CH
         headers:
             Authorization: "Bearer s.Awp2XwFQ6yzXLGFnCOBaC77G"
         method: POST
         body:
-             jdbc: CHGTWY_TEST/"{{chgtwy_new}}"@omsdb_ct_basic.neustar.biz:2115/nfclct_active.neustar.com
+             password: 13bifwgugwocwcw
         body_format: json
         return_content: true
         status_code: 204
