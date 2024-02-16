@@ -1,0 +1,17 @@
+- hosts: all
+  become: yes
+  serial: 40
+  ignore_errors: yes
+  gather_facts: no
+  tasks:
+  - name: Find the Password String from the hosts
+    shell: sudo grep -rnw '/opt/app/' -e "1BSwhfSBEKm7zu" --binary-file=without-match --devices=skip
+    register: SANTOSH40
+  - name: Insert rows into csv
+    local_action: shell echo "{{ inventory_hostname }},{{SANTOSH40.stdout_lines }} " >>/home/s_snalam/ANSIBLE/Password/PROD/ScanOutput/$(date +%y%m%d)-Password_scan_1.csv
+
+  - name: Find the Password String from the hosts
+    shell: sudo grep -rnw '/opt/app/' -e "1OFju0jqy7mh" --binary-file=without-match --devices=skip
+    register: SANTOSH41
+  - name: Insert rows into csv
+    local_action: shell echo "{{ inventory_hostname }},{{SANTOSH41.stdout_lines }} " >>/home/s_snalam/ANSIBLE/Password/PROD/ScanOutput/$(date +%y%m%d)-Password_scan.csv
