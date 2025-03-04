@@ -1,0 +1,39 @@
+- name: Boot Dell Server with OS via iDRAC
+  hosts: localhost
+  gather_facts: no
+  vars:
+    idrac_host: "10.2.112.115"  # iDRAC IP address
+    idrac_user: "XXXXXXXX"        # iDRAC username
+    idrac_password: "XXXXX" # iDRAC password
+  tasks:
+    - name: Insert image file to virtual media using s3 url.
+      dellemc.openmanage.idrac_virtual_media:
+         idrac_ip: "{{ idrac_host }}"
+         idrac_user: "{{ idrac_user }}"
+         idrac_password: "{{ idrac_password }}"
+         virtual_media:
+           - insert: true
+             media_type: CD
+             image: "https://XXXXXXX.iso"
+         validate_certs : false
+      register: san_insert_media_response
+
+    - name: Set Boot to Virtual CD/DVD
+      dellemc.openmanage.idrac_boot:
+        idrac_ip: "{{ idrac_host }}"
+        idrac_user: "{{ idrac_user }}"
+        idrac_password: "{{ idrac_password }}"
+        boot_source_override_target: cd
+        boot_source_override_enabled: continuous
+        validate_certs: false
+      register: san_boot_override_response
+    
+
+    - name: Debug insert media response
+      debug:
+        var: san_insert_media_response
+
+    - name: Debug insert media response
+      debug:
+        var: san_boot_override_response
+
